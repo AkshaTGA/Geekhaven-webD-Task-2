@@ -114,11 +114,25 @@ const removefromCart = async (req, res) => {
 };
 
 
+
+
+const deleteAccount=async (req,res)=>{
+  const userId = req.user._id;
+  try {
+    await User.findByIdAndDelete(userId);
+    res.status(200).json({ message: "Account deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to delete account: " + err.message });
+  }
+}
+
+
 module.exports = {
   AddAddressNphone,
   DisplayAllItems,
   GetOneItem,
   UpdateUserDetails,
   addtoCart,
-  removefromCart
+  removefromCart,
+  deleteAccount
 };

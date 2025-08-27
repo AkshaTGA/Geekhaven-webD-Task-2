@@ -6,7 +6,7 @@ const ApplyForSeller = async (req, res) => {
   const userId = req.user._id;
   try {
     const updatedUser = await User.findByIdAndUpdate(
-      userId,
+      { _id: userId },
       { role: "seller", SellerDetails },
       { new: true }
     );

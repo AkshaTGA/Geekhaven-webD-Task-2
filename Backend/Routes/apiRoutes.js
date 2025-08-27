@@ -17,6 +17,7 @@ const {
   UpdateUserDetails,
   addtoCart,
   removefromCart,
+  deleteAccount,
 } = require("../Controllers/AllUserfunctions");
 
 router.use(
@@ -46,7 +47,7 @@ router.get("/products", DisplayAllItems);
 
 router.get("/item/:id", GetOneItem);
 
-router.put("/user/update", UpdateUserDetails);
+router.put("/update", UpdateUserDetails);
 
 router.post("/partner/additem", authcheck, AddItem);
 
@@ -55,6 +56,9 @@ router.delete("/partner/removeitem", authcheck, removeItem);
 router.put("/partner/edititem", authcheck, EditItems);
 
 router.put("/addtocart", authcheck, addtoCart);
+
 router.put("/removefromcart", authcheck, removefromCart);
+
+router.delete("/delete", authcheck, deleteAccount);
 
 module.exports = router;

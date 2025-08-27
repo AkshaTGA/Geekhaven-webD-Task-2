@@ -54,6 +54,7 @@ const userSchema = new mongoose.Schema(
         AccountNo: String,
         IFSC: String,
       },
+      YourItems: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
     },
   },
   { timestamps: true }
