@@ -25,7 +25,7 @@ const handleSignup = async (req, res) => {
 };
 
 const handleLogin = async (req, res) => {
-  const { email, password } = req.body;
+  var { email, password } = req.body;
   if (!email || !password) {
     return res.status(400).json({ message: "All fields are required" });
   }
@@ -39,8 +39,7 @@ const handleLogin = async (req, res) => {
   if (!isMatch) {
     return res.status(401).json({ message: "Invalid email or password" });
   }
-  const userObj = user.toObject();
-  delete userObj.password;
+  var { password, ...userObj } = user._doc;
   const token = getsessionID(userObj);
   res.cookie("SID", token, {
     httpOnly: true,

@@ -14,7 +14,6 @@ const AddAddressNphone = async (req, res) => {
       { address, phone },
       { new: true }
     ).select("-password");
-
     res.json(updatedUser);
   } catch (err) {
     res.status(500).json({ error: "Failed to update address: " + err.message });
@@ -68,26 +67,41 @@ const GetOneItem = async (req, res) => {
 };
 
 const addtoCart = async (req, res) => {
-  const { id, qty } = req.body;
-  const userid = req.user._id;
+  try {
+    const { id, qty } = req.body;
+    const userid = req.user._id;
 
-  const exists = await User.findOne({ _id: userid, "Cart.Item": id })
-  if (exists) {
-    const response = await User.findByIdAndUpdate(
-      userid,
-      { $addToSet: { Cart: { Item: id, quantity: qty } } },
-      { new: true }
-    ).select("-password");
+    const user = await User.findOne({
+      _id: userid,
+      "Cart.Item": id,
+    });
+
+    let response;
+
+    if (user) {
+      response = await User.findOneAndUpdate(
+        { _id: userid, "Cart.Item": id },
+        { $set: { "Cart.$.quantity": qty } },
+        { new: true }
+      ).select("-password");
+    } else {
+      response = await User.findByIdAndUpdate(
+        userid,
+        { $push: { Cart: { Item: id, quantity: qty } } },
+        { new: true }
+      ).select("-password");
+    }
+
     return res.json(response);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Server error" });
   }
-
-  const response = await User.findByIdAndUpdate(
-    userid,
-    { $addToSet: { Cart: { Item: id, quantity: qty } } },
-    { new: true }
-  ).select("-password");
-  return res.json(response);
 };
+
+
+
+
 
 module.exports = {
   AddAddressNphone,
