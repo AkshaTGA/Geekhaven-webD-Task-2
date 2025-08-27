@@ -71,10 +71,7 @@ const addtoCart = async (req, res) => {
     const { id, qty } = req.body;
     const userid = req.user._id;
 
-    const user = await User.findOne({
-      _id: userid,
-      "Cart.Item": id,
-    });
+    const user = await User.findOne({ _id: userid, "Cart.Item": id });
 
     let response;
 
@@ -82,8 +79,7 @@ const addtoCart = async (req, res) => {
       response = await User.findOneAndUpdate(
         { _id: userid, "Cart.Item": id },
         { $set: { "Cart.$.quantity": qty } },
-        { new: true }
-      ).select("-password");
+        { new: true }).select("-password");
     } else {
       response = await User.findByIdAndUpdate(
         userid,
@@ -99,8 +95,23 @@ const addtoCart = async (req, res) => {
   }
 };
 
+const removefromCart = async (req, res) => {
+  try {
+    const { id } = req.body;
+    const userid =req.user._id;
 
+    const response = await User.findOneAndUpdate(
+      { _id: userid },
+      { $pull: { Cart: { Item: id } } },
+      { new: true }
+    ).select("-password");
 
+    return res.json(response);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Server error" });
+  }
+};
 
 
 module.exports = {
@@ -109,4 +120,5 @@ module.exports = {
   GetOneItem,
   UpdateUserDetails,
   addtoCart,
+  removefromCart
 };

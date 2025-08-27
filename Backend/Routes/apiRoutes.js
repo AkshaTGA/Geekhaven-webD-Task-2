@@ -16,6 +16,7 @@ const {
   GetOneItem,
   UpdateUserDetails,
   addtoCart,
+  removefromCart,
 } = require("../Controllers/AllUserfunctions");
 
 router.use(
@@ -54,5 +55,6 @@ router.delete("/partner/removeitem", authcheck, removeItem);
 router.put("/partner/edititem", authcheck, EditItems);
 
 router.put("/addtocart", authcheck, addtoCart);
+router.put("/removefromcart", authcheck, removefromCart);
 
 module.exports = router;

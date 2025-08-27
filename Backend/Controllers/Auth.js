@@ -49,12 +49,12 @@ const handleLogin = async (req, res) => {
   return res.status(200).json({ message: "Login successful", userObj });
 };
 
-const authcheck = (req, res, next) => {
+const authcheck = async (req, res, next) => {
   const token = req.cookies?.SID;
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });
   }
-  const data = verifysessionID(token);
+  const data = await verifysessionID(token);
   if (!data) {
     return res.status(401).json({ message: "Unauthorized" });
   }

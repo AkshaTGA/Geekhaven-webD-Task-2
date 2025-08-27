@@ -18,8 +18,8 @@ const verifysessionID =async  (token) => {
   try {
     const data= jwt.verify(token, secretKey);
     const id=data._id;
-    const {password,...user}  = await User.findById(id);
-    console.log(user);
+    const user  = await User.findOne({_id:id}).lean();
+    delete user.password;
     return user;
   } catch (err) {
     console.error("Something went wrong: " + err.message);
