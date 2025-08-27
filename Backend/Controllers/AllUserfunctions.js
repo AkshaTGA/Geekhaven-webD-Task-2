@@ -79,7 +79,8 @@ const addtoCart = async (req, res) => {
       response = await User.findOneAndUpdate(
         { _id: userid, "Cart.Item": id },
         { $set: { "Cart.$.quantity": qty } },
-        { new: true }).select("-password");
+        { new: true }
+      ).select("-password");
     } else {
       response = await User.findByIdAndUpdate(
         userid,
@@ -98,7 +99,7 @@ const addtoCart = async (req, res) => {
 const removefromCart = async (req, res) => {
   try {
     const { id } = req.body;
-    const userid =req.user._id;
+    const userid = req.user._id;
 
     const response = await User.findOneAndUpdate(
       { _id: userid },
@@ -113,10 +114,43 @@ const removefromCart = async (req, res) => {
   }
 };
 
+const addtoLiked = async (req, res) => {
+  try {
+    const { id } = req.body;
+    const userid = req.user._id;
 
+    let response = await User.findByIdAndUpdate(
+      userid,
+      { $push: { likedItems: id } },
+      { new: true }
+    ).select("-password");
 
+    return res.json(response);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Server error" });
+  }
+};
 
-const deleteAccount=async (req,res)=>{
+const removefromLiked = async (req, res) => {
+  try {
+    const { id } = req.body;
+    const userid = req.user._id;
+
+    let response = await User.findByIdAndUpdate(
+      userid,
+      { $pull: { likedItems: id } },
+      { new: true }
+    ).select("-password");
+
+    return res.json(response);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Server error" });
+  }
+};
+
+const deleteAccount = async (req, res) => {
   const userId = req.user._id;
   try {
     await User.findByIdAndDelete(userId);
@@ -124,8 +158,7 @@ const deleteAccount=async (req,res)=>{
   } catch (err) {
     res.status(500).json({ error: "Failed to delete account: " + err.message });
   }
-}
-
+};
 
 module.exports = {
   AddAddressNphone,
@@ -134,5 +167,7 @@ module.exports = {
   UpdateUserDetails,
   addtoCart,
   removefromCart,
-  deleteAccount
+  addtoLiked,
+  removefromLiked,
+  deleteAccount,
 };

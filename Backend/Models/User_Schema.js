@@ -43,7 +43,7 @@ const userSchema = new mongoose.Schema(
     ],
 
     likedItems: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
-    
+
     recentlyViewed: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
 
     YourTransactions: [
@@ -58,6 +58,9 @@ const userSchema = new mongoose.Schema(
         IFSC: String,
       },
       YourItems: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
+      OrdersRecieved: [
+        { type: mongoose.Schema.Types.ObjectId, ref: "Transaction" },
+      ],
     },
   },
   { timestamps: true }
