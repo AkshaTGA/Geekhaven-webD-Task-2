@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["buyer", "seller", "both"],
+      enum: ["buyer", "seller", "admin"],
       required: true,
     },
     address: {
@@ -41,7 +41,10 @@ const userSchema = new mongoose.Schema(
         quantity: { type: String, default: 1 },
       },
     ],
+
     likedItems: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
+    
+    recentlyViewed: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
 
     YourTransactions: [
       { type: mongoose.Schema.Types.ObjectId, ref: "Transaction" },

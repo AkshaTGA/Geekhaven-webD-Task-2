@@ -1,6 +1,10 @@
 const User = require("../Models/User_Schema");
 const bcrypt = require("bcrypt");
-const { verifysessionID, getsessionID } = require("./jwt.js");
+const {
+  verifysessionID,
+  getsessionID,
+  getAdminSessionID,
+} = require("./jwt.js");
 
 const handleSignup = async (req, res) => {
   const { firstname, lastname, email, password } = req.body;
@@ -40,7 +44,12 @@ const handleLogin = async (req, res) => {
     return res.status(401).json({ message: "Invalid email or password" });
   }
   var { password, ...userObj } = user._doc;
-  const token = getsessionID(userObj);
+  let token;
+  if (user.role === "admin") {
+    token = getAdminSessionID(userObj);
+  } else {
+    token = getsessionID(userObj);
+  }
   res.cookie("SID", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",

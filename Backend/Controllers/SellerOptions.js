@@ -9,7 +9,7 @@ const ApplyForSeller = async (req, res) => {
       { _id: userId },
       { role: "seller", SellerDetails },
       { new: true }
-    );
+    ).select("-password");
     res.status(200).json(updatedUser);
   } catch (err) {
     res
@@ -19,8 +19,7 @@ const ApplyForSeller = async (req, res) => {
 };
 
 const AddItem = async (req, res) => {
-  console.log(req.user);
-  if (req.user.role !== "seller") {
+  if (req.user.role !== "seller" && req.user.role !== "admin") {
     return res.status(403).json({ message: "Only sellers can add items" });
   }
   const {
@@ -56,27 +55,49 @@ const AddItem = async (req, res) => {
       images,
       CurrentlyAvailable,
     });
-    res.status(201).json({ Status: "Success", Item: newItem });
+    const resp = await User.findOneAndUpdate(
+      { _id: UserID },
+      { $push: { "SellerDetails.YourItems": newItem._id } },
+      { new: true }
+    ).select("-password");
+
+    res.status(201).json({ Status: "Success", updated: resp });
   } catch (err) {
     res.status(500).json({ error: "Failed to add item: " + err.message });
   }
 };
 
 const removeItem = async (req, res) => {
+  if (req.user.role !== "seller" && req.user.role !== "admin") {
+    return res
+      .status(403)
+      .json({ message: "Only sellers and admins can remove items" });
+  }
+  const UserID = req.user._id;
   const { id } = req.body;
   try {
     const deletedItem = await product.findByIdAndDelete(id);
     if (!deletedItem) {
       return res.status(404).json({ message: "Item not found" });
     }
-    res.status(200).json({ message: "Item removed successfully" });
+    const resp = await User.findOneAndUpdate(
+      { _id: UserID },
+      { $pull: { "SellerDetails.YourItems": id } },
+      { new: true }
+    ).select("-password");
+
+    res.status(200).json({ message: "Item removed successfully", updated: resp });
   } catch (err) {
     res.status(500).json({ error: "Failed to remove item: " + err.message });
   }
 };
 
 const EditItems = async (req, res) => {
-  console.log(JSON.stringify(req.user));
+  if (req.user.role !== "seller" && req.user.role !== "admin") {
+    return res
+      .status(403)
+      .json({ message: "Only sellers and admins can remove items" });
+  }
   const { id, newdetails } = req.body;
   try {
     const updatedItem = await product.findByIdAndUpdate(id, newdetails, {
@@ -85,7 +106,7 @@ const EditItems = async (req, res) => {
     if (!updatedItem) {
       return res.status(404).json({ message: "Item not found" });
     }
-    res.status(200).json(updatedItem);
+    res.status(200).json({ message: "Item updated successfully", updated: updatedItem });
   } catch (err) {
     res.status(500).json({ error: "Failed to update item: " + err.message });
   }

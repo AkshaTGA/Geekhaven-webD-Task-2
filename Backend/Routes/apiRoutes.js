@@ -49,7 +49,7 @@ router.get("/item/:id", GetOneItem);
 
 router.put("/update", UpdateUserDetails);
 
-router.post("/partner/additem", authcheck, AddItem);
+router.put("/partner/additem", authcheck, AddItem);
 
 router.delete("/partner/removeitem", authcheck, removeItem);
 
