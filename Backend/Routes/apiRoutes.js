@@ -58,11 +58,15 @@ router.delete("/partner/removeitem", authcheck, removeItem);
 router.put("/partner/edititem", authcheck, EditItems);
 
 router.put("/addtocart", authcheck, addtoCart);
+
 router.put("/addtoliked", authcheck, addtoLiked);
 
 router.put("/removefromcart", authcheck, removefromCart);
+
 router.put("/removefromliked", authcheck, removefromLiked);
 
 router.delete("/delete", authcheck, deleteAccount);
+
+
 
 module.exports = router;

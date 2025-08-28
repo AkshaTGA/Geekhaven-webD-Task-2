@@ -16,6 +16,15 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    ProductCondition: {
+      type: String,
+      enum: ["New", "Used", "Refurbished"],
+      required: true,
+    },
+    monthsUsed: {
+      type: Number,
+      min: 0,
+    },
     Stock: {
       type: Number,
       required: true,

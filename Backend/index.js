@@ -2,12 +2,23 @@ const express = require("express");
 const ConnectToMongoDB = require("./MongoConnect");
 require("dotenv").config();
 const router = require("./Routes/apiRoutes");
+const {LogRequests,getLoggedRequests}=require("./Controllers/Logrequests");
 
 const app = express();
 
 const port = process.env.PORT;
+app.use(LogRequests);
+
 
 app.use("/api", router);
+
+app.get("/iit2024077/healthz", (req, res) => {
+  res.json({
+    status: "OK",
+  });
+});
+
+app.get("/logs/recent", getLoggedRequests);
 
 ConnectToMongoDB(process.env.atlas_url)
   .then(() => {
