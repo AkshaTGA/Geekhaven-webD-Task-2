@@ -52,7 +52,8 @@ const handleLogin = async (req, res) => {
   }
   res.cookie("SID", token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: "true",
+    sameSite:"none",
     maxAge: 30 * 60 * 1000,
   });
   return res.status(200).json({ message: "Login successful", userObj });

@@ -3,6 +3,7 @@ require("dotenv").config();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const router = express.Router();
+const fileupload = require("express-fileupload");
 const { handleSignup, handleLogin, authcheck } = require("../Controllers/Auth");
 const {
   ApplyForSeller,
@@ -24,7 +25,7 @@ const {
 
 router.use(
   cors({
-    origin: "http://localhost:5173",
+    origin:"null",
     credentials: true,
   })
 );
@@ -32,6 +33,7 @@ router.use(
 router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
 router.use(cookieParser());
+router.use(fileupload({ useTempFiles: true }));
 
 router.get("/hi", (req, res) => {
   res.send("hi");
@@ -51,7 +53,7 @@ router.get("/item/:id", GetOneItem);
 
 router.put("/update", UpdateUserDetails);
 
-router.put("/partner/additem", authcheck, AddItem);
+router.post("/partner/additem",authcheck, AddItem);
 
 router.delete("/partner/removeitem", authcheck, removeItem);
 
@@ -66,7 +68,5 @@ router.put("/removefromcart", authcheck, removefromCart);
 router.put("/removefromliked", authcheck, removefromLiked);
 
 router.delete("/delete", authcheck, deleteAccount);
-
-
 
 module.exports = router;

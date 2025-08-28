@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Test Add Item API</title>
+  </head>
+  <body>
+    <h2>Login & Add Item</h2>
+
+    <button onclick="login()">Login</button>
+    <br /><br />
+
+    <form id="itemForm" enctype="multipart/form-data">
+      <input
+        type="text"
+        name="Productname"
+        placeholder="Product Name"
+        required
+      /><br /><br />
+      <input
+        type="number"
+        name="price"
+        placeholder="Price"
+        required
+      /><br /><br />
+      <textarea name="description" placeholder="Description" required></textarea
+      ><br /><br />
+      <input
+        type="number"
+        name="Stock"
+        placeholder="Stock"
+        required
+      /><br /><br />
+      <input
+        type="text"
+        name="category"
+        placeholder="Category"
+        required
+      /><br /><br />
+      <select name="ProductCondition" required>
+        <option value="">-- Condition --</option>
+        <option value="New">New</option>
+        <option value="Used">Used</option></select
+      ><br /><br />
+      <input
+        type="number"
+        name="monthsUsed"
+        placeholder="Months Used (if used)"
+      /><br /><br />
+      <label>
+        Currently Available:
+        <select name="CurrentlyAvailable" required>
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select> </label
+      ><br /><br />
+      <input type="file" name="photo" multiple required /><br /><br />
+      <button type="button" onclick="addItem()">Add Item</button>
+    </form>
+
+    <pre id="output"></pre>
+
+    <script>
+      const BASE_URL = "http://localhost:3000/api";
+
+      async function login() {
+        try {
+          const res = await fetch(`${BASE_URL}/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({
+              email: "akshat.parmar@example.com",
+              password: "StrongPassword123",
+            }),
+          });
+          const data = await res.json();
+          document.getElementById("output").textContent =
+            "Login response:\n" + JSON.stringify(data, null, 2);
+        } catch (err) {
+          document.getElementById("output").textContent = "Login error: " + err;
+        }
+      }
+
+      async function addItem() {
+        const form = document.getElementById("itemForm");
+        const formData = new FormData(form);
+
+        // ✅ Check total photo size
+        const files = form.querySelector('input[name="photo"]').files;
+        let totalSize = 0;
+        for (let f of files) {
+          totalSize += f.size;
+        }
+
+        if (totalSize > 10 * 1024 * 1024) {
+          document.getElementById("output").textContent =
+            "❌ Total file size exceeds 10 MB. Please upload smaller files.";
+          return;
+        }
+
+        try {
+          const res = await fetch(`${BASE_URL}/partner/additem`, {
+            method: "POST",
+            body: formData,
+            credentials: "include",
+          });
+          const data = await res.json();
+          document.getElementById("output").textContent =
+            "Add Item response:\n" + JSON.stringify(data, null, 2);
+        } catch (err) {
+          document.getElementById("output").textContent =
+            "Add Item error: " + err;
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -10,13 +10,17 @@ const LogRequests = async (req, res, next) => {
       ip: req.ip,
       headers: req.headers,
     });
-    const count = await Log.countDocuments();
-    if (count > 50) {
-      const extra = count - 50;
-      await Log.find({}).sort({ time: 1 }).limit(extra).deleteMany();
-    }
 
+    const keep = 50;
+
+    const idtokeep = await Log.find({})
+      .sort({ time: -1 })
+      .select("_id")
+      .limit(keep);
+
+    await Log.deleteMany({ _id: { $nin: idtokeep } });
     console.log("Log Saved...");
+
     next();
   } catch (err) {
     console.log("Log not saved..." + err.message);
@@ -24,10 +28,9 @@ const LogRequests = async (req, res, next) => {
   }
 };
 
-
 const getLoggedRequests = async (req, res) => {
   try {
-    const logs = await Log.find({});
+    const logs = await Log.find({}).sort({ time: -1 });
     res.json(logs);
   } catch (err) {
     console.log("Error fetching logs..." + err.message);
