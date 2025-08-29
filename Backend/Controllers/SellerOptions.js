@@ -1,7 +1,7 @@
 const product = require("../Models/Product_Schema");
 const User = require("../Models/User_Schema");
 const v2 = require("../Cloudinary/CloudinaryConfig");
-const { Result } = require("postcss");
+const { getSku } = require("../utils/seed");
 const ApplyForSeller = async (req, res) => {
   const { SellerDetails } = req.body;
   const userId = req.user?._id;
@@ -20,9 +20,6 @@ const ApplyForSeller = async (req, res) => {
 };
 
 const AddItem = async (req, res) => {
-
-
-
   const {
     Productname,
     price,
@@ -40,9 +37,6 @@ const AddItem = async (req, res) => {
 
   let photos = req.files.photo;
 
-
-
-
   if (
     !Productname ||
     !price ||
@@ -58,21 +52,19 @@ const AddItem = async (req, res) => {
   const UserID = req.user._id;
   let results;
   try {
+    if (!Array.isArray(photos)) {
+      photos = [photos];
+    }
 
-        if (!Array.isArray(photos)) {
-    photos = [photos];
-  }
+    const uploads = photos.map((file) => v2.uploader.upload(file.tempFilePath));
 
-  const uploads = photos.map((file) =>
-    v2.uploader.upload(file.tempFilePath)
-  );
-
-  results = await Promise.all(uploads);
-  const photoslinks = results.map((result) => result.secure_url);
-
+    results = await Promise.all(uploads);
+    const photoslinks = results.map((result) => result.secure_url);
+ 
     let newItem;
     if (ProductCondition != "Used") {
       newItem = await product.create({
+        SKU: getSku(Productname),
         seller: UserID,
         Productname,
         price,
@@ -80,11 +72,13 @@ const AddItem = async (req, res) => {
         ProductCondition,
         Stock,
         category,
-        images:photoslinks,
+        images: photoslinks,
         CurrentlyAvailable,
       });
     } else {
       newItem = await product.create({
+        SKU: getSku(Productname),
+
         seller: UserID,
         Productname,
         price,
@@ -93,7 +87,7 @@ const AddItem = async (req, res) => {
         monthsUsed: monthsUsed || 0,
         Stock,
         category,
-        images:photoslinks,
+        images: photoslinks,
         CurrentlyAvailable,
       });
     }
@@ -134,7 +128,7 @@ const removeItem = async (req, res) => {
     ).select("-password");
 
     for (const imgUrl of images.images) {
-      const publicurl=imgUrl.split("/")[7].split(".")[0];
+      const publicurl = imgUrl.split("/")[7].split(".")[0];
       v2.uploader.destroy(publicurl);
     }
 
@@ -142,7 +136,6 @@ const removeItem = async (req, res) => {
       .status(200)
       .json({ message: "Item removed successfully", updated: resp });
   } catch (err) {
-
     v2.uploader.destroy(deletedItem.public_id);
     res.status(500).json({ error: "Failed to remove item: " + err.message });
   }

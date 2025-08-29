@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema(
   {
+
+    SKU: {
+      type: String,
+      required: true,
+    },
     Productname: {
       type: String,
       required: true,
