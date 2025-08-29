@@ -5,7 +5,7 @@ const transactionSchema = new mongoose.Schema(
     idempotencyKey: {
       type: String,
       required: true,
-      unique: true,
+      index: true,
     },
     buyer: {
       type: mongoose.Schema.Types.ObjectId,
@@ -40,10 +40,9 @@ const transactionSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["pending", "success", "failed"],
+      enum: ["pending", "sucess", "failed"],
       default: "pending",
     },
-    transactionRef: String,
   },
   { timestamps: true }
 );

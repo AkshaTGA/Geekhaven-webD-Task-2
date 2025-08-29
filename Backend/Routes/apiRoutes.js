@@ -23,10 +23,13 @@ const {
   deleteAccount,
 } = require("../Controllers/AllUserfunctions");
 
+const {checkout, getPriceBreakup} = require("../Controllers/Checkout");
+
 router.use(
   cors({
     origin:"null",
     credentials: true,
+    exposedHeaders: ["X-Signature"],
   })
 );
 
@@ -69,6 +72,8 @@ router.put("/removefromliked", authcheck, removefromLiked);
 
 router.delete("/delete", authcheck, deleteAccount);
 
+router.get("/priceBreakup", authcheck, getPriceBreakup);
 
+router.post("/checkout", authcheck, checkout);
 
 module.exports = router;
