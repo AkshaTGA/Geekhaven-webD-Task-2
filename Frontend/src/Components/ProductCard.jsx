@@ -24,15 +24,14 @@ const ProductCard = ({ product }) => {
         <p className="text-sm text-gray-600 mt-2">
           Condition:{" "}
           <span className="font-medium">
-            {product.condition === "new"
+            {product.condition === "New"
               ? "New"
-              : product.condition === "refurbished"
+              : product.condition === "Refurbished"
               ? "Refurbished"
               : `Used (${product.monthsUsed} months)`}
           </span>
         </p>
 
-        {/* Button stays at bottom */}
         <button
           className="mt-2 cursor-pointer w-full py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition"
           onClick={(e) => {

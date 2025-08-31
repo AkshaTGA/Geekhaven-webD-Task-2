@@ -12,7 +12,8 @@ const NavbarLoggedIn = ({ user = { name: "Guest", role: "buyer" } }) => {
   const handleLogout = () => {
     console.log("Logging out...");
     clearUser()
-    navigate("/login");
+    sessionStorage.removeItem("isLoggedIn");
+    navigate("/login"); 
   };
 
   return (

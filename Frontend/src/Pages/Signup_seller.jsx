@@ -103,7 +103,6 @@ const Signup_Seller = () => {
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 relative overflow-hidden">
       <ToastContainer />
 
-      {/* Background Elements */}
       <div className="absolute top-[-50px] left-[-50px] w-72 h-72 bg-blue-200 rounded-full opacity-30 animate-pulse"></div>
       <div className="absolute bottom-[-50px] right-[-50px] w-72 h-72 bg-indigo-200 rounded-full opacity-30 animate-pulse"></div>
 
@@ -116,7 +115,6 @@ const Signup_Seller = () => {
       </h1>
 
       {!otpStep ? (
-        // Signup Form
         <div className="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-md transform transition duration-500 hover:scale-105 hover:shadow-3xl relative z-10">
           <h2 className="text-3xl font-bold text-center text-indigo-700 mb-6">
             Apply as Seller
@@ -194,7 +192,6 @@ const Signup_Seller = () => {
           </p>
         </div>
       ) : (
-        // OTP Verification Step
         <div className="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-md transform transition duration-500 hover:scale-105 hover:shadow-3xl relative z-10">
           <h2 className="text-3xl font-bold text-center text-indigo-700 mb-6">
             Verify OTP
