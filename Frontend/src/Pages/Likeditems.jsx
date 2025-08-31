@@ -8,6 +8,41 @@ import { Loader2, Heart, Trash2 } from "lucide-react";
 const ProductCard = ({ product, removeFromLiked, isLoading }) => {
   const navigate = useNavigate();
   const image = product.images[0];
+  const { user, updateUser } = useUser();
+  const [addedToCart, setAddedToCart] = useState(false);
+  const [loadingAddToCart, setLoadingAddToCart] = useState(false);
+
+  useEffect(() => {
+    const isInCart = user?.Cart.some(
+      (cartItem) => cartItem.Item.toString() === product?._id.toString()
+    );
+    setAddedToCart(isInCart);
+  }, [user?.Cart, product?._id]);
+
+
+
+
+
+  const addToCart = async () => {
+    setLoadingAddToCart(true);
+    try {
+      const res = await fetch("http://localhost:3001/api/addtocart", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ id: product._id, qty: 1 }),
+      });
+
+      const updatedUser = await res.json();
+      if (updatedUser._id) updateUser(updatedUser);
+    } catch (err) {
+      console.error("Error adding to cart:", err);
+    } finally {
+      setLoadingAddToCart(false);
+    }
+  };
 
   return (
     <div
@@ -39,13 +74,18 @@ const ProductCard = ({ product, removeFromLiked, isLoading }) => {
         </p>
         <div className="flex items-center space-x-2 mt-2">
           <button
-            className="w-full py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition"
+            className="flex-1 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition disabled:opacity-50"
             onClick={(e) => {
               e.stopPropagation();
-              // Add to cart functionality (not implemented here)
+              addToCart();
             }}
+            disabled={loadingAddToCart || isLoading|| addedToCart}
           >
-            Add to Cart
+            {loadingAddToCart ? (
+              <Loader2 className="animate-spin w-5 h-5 mx-auto" />
+            ) : (
+              `${addedToCart ? "Added to Cart" : "Add to Cart"}`
+            )}
           </button>
           <button
             onClick={(e) => {
