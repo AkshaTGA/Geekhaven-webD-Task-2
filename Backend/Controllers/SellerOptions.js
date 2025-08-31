@@ -29,6 +29,7 @@ const AddItem = async (req, res) => {
     ProductCondition,
     CurrentlyAvailable,
     monthsUsed,
+    subcategory,
   } = req.body;
 
   if (req.user.role !== "seller" && req.user.role !== "admin") {
@@ -60,7 +61,7 @@ const AddItem = async (req, res) => {
 
     results = await Promise.all(uploads);
     const photoslinks = results.map((result) => result.secure_url);
- 
+
     let newItem;
     if (ProductCondition != "Used") {
       newItem = await product.create({
@@ -74,6 +75,7 @@ const AddItem = async (req, res) => {
         category,
         images: photoslinks,
         CurrentlyAvailable,
+        subcategory: subcategory ? subcategory : "Normal",
       });
     } else {
       newItem = await product.create({
@@ -89,6 +91,7 @@ const AddItem = async (req, res) => {
         category,
         images: photoslinks,
         CurrentlyAvailable,
+        subcategory: subcategory ? subcategory : "Normal",
       });
     }
     const resp = await User.findOneAndUpdate(

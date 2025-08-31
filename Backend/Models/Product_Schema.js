@@ -35,6 +35,7 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     category: String,
+    subcategory: String,
     images: [String],
     CurrentlyAvailable: {
       type: Boolean,

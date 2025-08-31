@@ -59,7 +59,10 @@ const UpdateUserDetails = async (req, res) => {
 
 const GetOneItem = async (req, res) => {
   const { id } = req.params;
-  const item = await product.findById(id);
+  const item = await product.findById(id).populate({
+    path: "seller",
+    select: "SellerDetails.BussinessCity SellerDetails.BussinessName",
+  });
   if (!item) {
     return res.status(404).json({ message: "Item not found" });
   }
@@ -149,7 +152,6 @@ const removefromLiked = async (req, res) => {
     return res.status(500).json({ error: "Server error" });
   }
 };
-
 
 const deleteAccount = async (req, res) => {
   const userId = req.user._id;

@@ -27,7 +27,7 @@ const {checkout, getPriceBreakup} = require("../Controllers/Checkout");
 
 router.use(
   cors({
-    origin:"null",
+    origin:"http://localhost:5173",
     credentials: true,
     exposedHeaders: ["X-Signature"],
   })
