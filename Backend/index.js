@@ -3,11 +3,22 @@ const ConnectToMongoDB = require("./MongoConnect");
 require("dotenv").config();
 const router = require("./Routes/apiRoutes");
 const {LogRequests,getLoggedRequests}=require("./Controllers/Logrequests");
-
+const cors=require("cors")
 const app = express();
 
 const port = process.env.PORT;
 app.use(LogRequests);
+
+
+app.use(
+  cors({
+    origin:"http://localhost:5173",
+    credentials: true,
+    exposedHeaders: ["X-Signature"],
+  })
+);
+
+
 
 
 app.use("/api", router);

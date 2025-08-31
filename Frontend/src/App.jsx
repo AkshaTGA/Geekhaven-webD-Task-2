@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 import { useUser } from "./context/Usercontext.jsx";
 import { useEffect } from "react";
 import Signup_Seller from "./Pages/Signup_seller.jsx";
+import CartPage from "./Pages/Cart.jsx";
 
 function App() {
   const { updateUser } = useUser();
@@ -23,11 +24,11 @@ function App() {
       element: <ProductPage />,
     },
     {
-      path: "/Login",
+      path: "/login",
       element: <Login />,
     },
     {
-      path: "/Signup",
+      path: "/signup",
       element: <Signup_Buyer />,
     },
     {
@@ -37,6 +38,10 @@ function App() {
     {
       path: "/partner/Signup",
       element: <Signup_Seller />,
+    },
+    {
+      path: "/cart",
+      element: <CartPage />,
     },
   ]);
 

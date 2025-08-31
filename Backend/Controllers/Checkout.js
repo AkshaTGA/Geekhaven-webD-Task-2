@@ -17,7 +17,6 @@ const getPriceBreakup = async (req, res) => {
   }, 0);
 
   const platformFee = Math.floor(0.017 * subtotal + n);
-  console.log(0.017 * subtotal + n);
   return res.json({ subtotal, platformFee });
 };
 

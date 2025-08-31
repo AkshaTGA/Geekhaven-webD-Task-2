@@ -9,12 +9,12 @@ const NormalKey = process.env.NormalKey;
 
 const getsessionID = (user) => {
   return jwt.sign(user, NormalKey, {
-    expiresIn: "30m",
+    expiresIn: "5h",
   });
 };
 const getAdminSessionID = (user) => {
   return jwt.sign(user, AdminKey, {
-    expiresIn: "1h",
+    expiresIn: "24h",
   });
 };
 

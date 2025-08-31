@@ -173,6 +173,39 @@ const deleteAccount = async (req, res) => {
   }
 };
 
+const addToRecentlyViewed = async (req, res) => {
+  try {
+    const { id } = req.body;
+    const userid = req.user._id;
+
+    if (!id) {
+      return res.status(400).json({ message: "Product id is required" });
+    }
+    if (id.length !== 24) {
+      return res.status(404).json({ message: "Item not found" });
+    }
+
+    const item = await product.findById(id).select("_id");
+    if (!item) {
+      return res.status(404).json({ message: "Item not found" });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userid,
+      {
+        $pull: { recentlyViewed: id },
+        $push: { recentlyViewed: { $each: [id], $position: 0, $slice: 8 } },
+      },
+      { new: true }
+    ).select("-password");
+
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error("Error updating recently viewed:", error);
+    return res.status(500).json({ error: "Server error" });
+  }
+};
+
 module.exports = {
   AddAddressNphone,
   DisplayAllItems,

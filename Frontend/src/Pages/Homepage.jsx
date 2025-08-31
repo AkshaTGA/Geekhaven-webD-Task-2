@@ -26,7 +26,7 @@ const Homepage = () => {
 
   const sampleProducts = [
   {
-    _id: "1",
+    _id: "68b1500fa51ae3e838beaa65",
     Productname: "Premium Wireless Headphones",
     description:
       "Experience immersive audio with active noise cancellation, 40 hours of battery life, and a sleek ergonomic design. Perfect for music lovers and professionals.",
@@ -40,7 +40,7 @@ const Homepage = () => {
     price: 299.99,
   },
   {
-    _id: "2",
+    _id: "68b0d2db628f935074a567ce",
     Productname: "Apple iPhone 13 Pro",
     description:
       "128GB, Sierra Blue. Excellent performance, ProMotion display, and amazing camera system. Lightly used, fully functional.",
