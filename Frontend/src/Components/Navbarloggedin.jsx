@@ -24,7 +24,6 @@ const NavbarLoggedIn = () => {
   return (
     <div className="sticky top-0 z-50">
       <nav className="bg-gradient-to-r from-blue-50 to-indigo-100 shadow-md px-8 py-4 flex items-center justify-between">
-        {/* Logo */}
         <div
           className="text-2xl font-extrabold text-indigo-700 tracking-wide cursor-pointer hover:scale-105 transition-transform"
           onClick={() => navigate("/")}
@@ -32,7 +31,6 @@ const NavbarLoggedIn = () => {
           Geekhaven-Shop
         </div>
 
-        {/* Search */}
         <div className="flex justify-center flex-1 mx-8">
           <input
             type="text"
@@ -41,7 +39,6 @@ const NavbarLoggedIn = () => {
           />
         </div>
 
-        {/* Right side */}
         <div className="flex items-center space-x-6 ">
           <button
             onClick={() => navigate("/about")}
@@ -51,7 +48,6 @@ const NavbarLoggedIn = () => {
             <span>About</span>
           </button>
 
-          {/* Liked with badge */}
           <div className="relative">
             <button
               onClick={() => navigate("/liked")}
@@ -67,7 +63,6 @@ const NavbarLoggedIn = () => {
             )}
           </div>
 
-          {/* Cart with badge */}
           <div className="relative">
             <button
               onClick={() => navigate("/cart")}
@@ -93,7 +88,6 @@ const NavbarLoggedIn = () => {
             </button>
           )}
 
-          {/* User dropdown */}
           <div
             className="relative"
             onMouseEnter={() => setShowDropdown(true)}
