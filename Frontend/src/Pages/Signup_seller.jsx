@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { User, Mail, Key, ShoppingCart, Tag, Package } from "lucide-react";
+import { User, Mail, Key, Store, Tag, Package } from "lucide-react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { notify } from "../util/toastmessage";
@@ -14,6 +14,7 @@ const Signup_Seller = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [otpStep, setOtpStep] = useState(false);
+
 
   const [otp, setOtp] = useState("");
   const [realOtp, setRealOtp] = useState("");
@@ -49,13 +50,7 @@ const Signup_Seller = () => {
       return false;
     }
     if (password.length < 6) {
-      notify(
-        "Password must be at least 6 characters",
-        "warn",
-        2000,
-        "top-right",
-        true
-      );
+      notify("Password must be at least 6 characters", "warn", 2000, "top-right", true);
       return false;
     }
     if (password !== confirmPassword) {
@@ -68,6 +63,8 @@ const Signup_Seller = () => {
   const handleSignup = (e) => {
     e.preventDefault();
     if (validate()) {
+      localStorage.setItem("applied", true);
+
       const code = generateOtp();
       setRealOtp(code);
 
@@ -76,33 +73,27 @@ const Signup_Seller = () => {
     }
   };
 
-  const handleVerify = async (e) => {
+  const handleVerify =async (e) => {
     e.preventDefault();
     if (!otp.trim()) {
       notify("Please enter OTP", "warn", 1500);
       return;
     }
     if (otp === realOtp) {
-      const user = {
-        firstname: fname,
-        lastname: lname,
-        email: email,
-        password: password,
-      };
 
-      const res = await signup(user);
-      console.log(res);
-      if (res.message == "User registered successfully") {
-        notify("Success, Account Verified, Please Login...", "success", 1500);
-        setTimeout(() => {
-          navigate("/login");
-        }, 2000);
-      } else if (res.message == "User already exists") {
-        return notify("User already exists, Please Login...", "warn", 1500);
+        const user={
+            firstname:fname,
+            lastname:lname,
+            email:email,
+            password:password
+        }
 
-      }else{
-        return notify("Something went wrong", "error", 1500);
-      }
+        const res=await signup(user)
+        console.log(res)
+      notify("Success, Account Verified, Please Login...", "success", 1500);
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
     } else {
       notify("Invalid OTP", "error", 1500);
     }
@@ -116,10 +107,9 @@ const Signup_Seller = () => {
       <div className="absolute top-[-50px] left-[-50px] w-72 h-72 bg-blue-200 rounded-full opacity-30 animate-pulse"></div>
       <div className="absolute bottom-[-50px] right-[-50px] w-72 h-72 bg-indigo-200 rounded-full opacity-30 animate-pulse"></div>
 
-      <ShoppingCart className="absolute top-20 left-10 w-30 h-30 text-blue-300 opacity-40 animate-pulse" />
+      <Store className="absolute top-20 left-10 w-30 h-30 text-blue-300 opacity-40 animate-pulse" />
       <Tag className="absolute top-40 right-20 w-50 h-50 text-indigo-300 opacity-40 animate-pulse" />
       <Package className="absolute bottom-32 left-16 w-50 h-50 text-purple-300  opacity-40 animate-pulse" />
-      <ShoppingCart className="absolute bottom-20 right-10 w-30 h-30 text-blue-300 opacity-40 animate-pulse" />
 
       <h1 className="text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-indigo-600 mb-8 animate-pulse">
         Geekhaven-Shop
@@ -129,7 +119,7 @@ const Signup_Seller = () => {
         // Signup Form
         <div className="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-md transform transition duration-500 hover:scale-105 hover:shadow-3xl relative z-10">
           <h2 className="text-3xl font-bold text-center text-indigo-700 mb-6">
-            Create your Acocunt
+            Apply as Seller
           </h2>
 
           <form onSubmit={handleSignup} className="flex flex-col gap-5">
@@ -211,8 +201,7 @@ const Signup_Seller = () => {
           </h2>
 
           <p className="text-center text-gray-600 mb-6">
-            An OTP has been sent to{" "}
-            <span className="font-semibold">{email}</span>
+            An OTP has been sent to <span className="font-semibold">{email}</span>
           </p>
 
           <form onSubmit={handleVerify} className="flex flex-col gap-5">

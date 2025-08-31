@@ -32,7 +32,7 @@ const Navbar = () => {
             <Heart className="w-5 h-5" />
             <span>Liked Items</span>
           </button>
-          <button  onClick={() => navigate("/become-seller")} className="flex items-center space-x-2 text-gray-700 hover:text-green-600 hover:border-1 p-2 rounded-xl  font-medium transition transform hover:scale-105 cursor-pointer">
+          <button  onClick={() => navigate("/partner/signup")} className="flex items-center space-x-2 text-gray-700 hover:text-green-600 hover:border-1 p-2 rounded-xl  font-medium transition transform hover:scale-105 cursor-pointer">
             <Store className="w-5 h-5" />
             <span>Become Seller</span>
           </button>

@@ -2,14 +2,16 @@ import { BadgeInfo, Heart, Store, User } from "lucide-react";
 import CategoryLister from "./CategoryLister";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useUser } from "../context/Usercontext";
 
 const NavbarLoggedIn = ({ user = { name: "Guest", role: "buyer" } }) => {
-
+  const { clearUser } = useUser();
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
 
   const handleLogout = () => {
     console.log("Logging out...");
+    clearUser()
     navigate("/login");
   };
 
@@ -46,7 +48,7 @@ const NavbarLoggedIn = ({ user = { name: "Guest", role: "buyer" } }) => {
           {user.role !== "seller" && (
             <button
               className="flex items-center space-x-2 text-gray-700 hover:text-green-600 p-2 rounded-xl hover:border-1 font-medium transition transform hover:scale-105 cursor-pointer"
-              onClick={() => navigate("/become-seller")}
+              onClick={() => navigate("/partner/signup")}
             >
               <Store className="w-5 h-5" />
               <span>Become Seller</span>

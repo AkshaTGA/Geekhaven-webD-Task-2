@@ -1,24 +1,44 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { notify } from "../util/toastmessage";
-
+import { useNavigate } from "react-router-dom";
 const Otp = ({ email }) => {
   const [otp, setOtp] = useState("");
+  const [realOtp, setRealOtp] = useState("");
+  const navigate = useNavigate();
+
+  const generateOtp = () => {
+    const code = Math.floor(Math.random() * 1000000).toString().padStart(6, "0");
+    console.log(code)
+    return code;
+  };
+
+  useEffect(() => {
+    const code = generateOtp();
+    setRealOtp(code);
+  }, []);
+
 
   const handleVerify = (e) => {
     e.preventDefault();
     if (!otp.trim()) {
-      notify("Please enter OTP", "warn", 2000, "top-right", true);
+      notify("Please enter OTP", "warn", 1500);
       return;
     }
-    // API finction daal de 
-    alert(`OTP ${otp} verified for ${email}`);
+    if (otp === realOtp) {
+      notify("Success, Account Verified, Please Login...");
+
+      setTimeout(() => {
+        navigate("/Login");
+      }, 2000);
+    } else {
+      notify("Invalid OTP", "error", 1500);
+    }
   };
 
   return (
     <div className="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-md transform transition duration-500 hover:scale-105 hover:shadow-3xl relative z-10">
-      <ToastContainer />
       <h2 className="text-3xl font-bold text-center text-indigo-700 mb-6">
         Verify OTP
       </h2>

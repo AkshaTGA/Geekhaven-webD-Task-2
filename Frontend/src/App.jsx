@@ -9,6 +9,7 @@ import LikedItems from "./Pages/Likeditems.jsx";
 import Cookies from "js-cookie";
 import { useUser } from "./context/Usercontext.jsx";
 import { useEffect } from "react";
+import Signup_Seller from "./Pages/Signup_seller.jsx";
 
 function App() {
   const { updateUser } = useUser();
@@ -33,6 +34,10 @@ function App() {
       path: "/liked",
       element: <LikedItems />,
     },
+    {
+      path: "/partner/Signup",
+      element: <Signup_Seller />,
+    },
   ]);
 
   useEffect(() => {
@@ -48,7 +53,6 @@ function App() {
           return await data.json();
         })
         .then((userdata) => {
-          console.log(userdata._id);
           if (userdata._id!=undefined) {
             return updateUser(userdata);
           } else {

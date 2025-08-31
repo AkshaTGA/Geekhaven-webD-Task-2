@@ -4,28 +4,37 @@ import { notify } from "../util/toastmessage";
 import { ToastContainer } from "react-toastify";
 import validator from "validator";
 import Handlelogin from "../util/Login";
-import {useUser} from "../context/Usercontext";
+import { useUser } from "../context/Usercontext";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const {updateUser,user} = useUser();
-const navigate = useNavigate();
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { updateUser, user } = useUser();
+  const navigate = useNavigate();
   const validate = () => {
     if (!email) {
-      notify("Email is required","warn",2000,"top-right",true);
+      notify("Email is required", "warn", 2000, "top-right", true);
       return false;
     } else if (validator.isEmail(email) === false) {
-      notify("Email is invalid","warn",2000,"top-right",true);
+      notify("Email is invalid", "warn", 2000, "top-right", true);
       return false;
     }
 
     if (!password) {
-      notify("Password is required","warn",2000,"top-right",true);
+      notify("Password is required", "warn", 2000, "top-right", true);
       return false;
     } else if (password.length < 6) {
-      notify("Password must be at least 6 characters","warn",2000,"top-right",true);
+      notify(
+        "Password must be at least 6 characters",
+        "warn",
+        2000,
+        "top-right",
+        true
+      );
       return false;
     }
 
@@ -33,24 +42,29 @@ const navigate = useNavigate();
   };
 
   const handleLogin = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
-    if (validate()) {
-
-      const loginResponse = await Handlelogin(email,password);
-      updateUser(loginResponse.userObj);
+    try {
+      if (validate()) {
+        const loginResponse = await Handlelogin(email, password);
+        updateUser(loginResponse.userObj);
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  
-  useEffect(()=>{
-    if(user){
-      console.log(user)
-      notify("Login successful","success",1500, "bottom-right",true);
+  useEffect(() => {
+    if (user) {
+      console.log(user);
+      notify("Login successful", "success", 1500, "bottom-right", true);
       setTimeout(() => {
         navigate("/");
       }, 2000);
     }
-  },[user]);
+  }, [user]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 relative overflow-hidden">
@@ -69,7 +83,6 @@ const navigate = useNavigate();
         </h2>
 
         <form onSubmit={handleLogin} className="flex flex-col gap-5">
-
           <div className="relative">
             <Mail className="absolute top-3 left-3 w-5 h-5 text-gray-400" />
             <input
@@ -103,10 +116,10 @@ const navigate = useNavigate();
           </div>
 
           <button
-            type="submit"
-            className="mt-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-2 rounded-xl font-semibold shadow-lg hover:shadow-2xl transition transform hover:scale-105"
+            type="submit" disabled={isLoading}
+            className={`${isLoading?"bg-gray-400":"bg-gradient-to-r  from-blue-500 to-indigo-600"} mt-4 text-white py-2 rounded-xl font-semibold shadow-lg hover:shadow-2xl transition transform hover:scale-105`}
           >
-            Login
+            {isLoading ? "Loading..." : "Login"}
           </button>
         </form>
 
