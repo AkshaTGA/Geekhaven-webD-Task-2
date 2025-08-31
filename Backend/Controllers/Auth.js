@@ -2,8 +2,8 @@ const User = require("../Models/User_Schema");
 const bcrypt = require("bcrypt");
 const {
   verifysessionID,
-  getsessionID,
   getAdminSessionID,
+  getsessionID,
 } = require("./jwt.js");
 
 const handleSignup = async (req, res) => {
@@ -72,4 +72,40 @@ const authcheck = async (req, res, next) => {
   next();
 };
 
-module.exports = { handleSignup, handleLogin, authcheck };
+
+const isAuthenticated = async(req, res) => {
+  const token = req?.cookies?.SID;
+  try {
+    const valid = await verifysessionID(token);
+
+    if (!valid || valid == "null") {
+      return false;
+    } else {
+      return true;
+    }
+  } catch (error) {
+    return false;
+  }
+};
+
+
+const checkauth = async (req, res) => {
+  const ans = await isAuthenticated(req);
+  if (ans) {
+    const data = await verifysessionID(req?.cookies?.SID);
+    res.json(data);
+  }
+  else{
+    return res.json({});
+  }
+};
+
+
+
+
+
+
+
+
+
+module.exports = { handleSignup, handleLogin, authcheck, checkauth};

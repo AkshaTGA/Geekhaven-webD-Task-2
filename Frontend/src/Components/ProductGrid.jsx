@@ -9,7 +9,7 @@ const ProductGrid = ({ products = [], title = "Products" }) => {
       {products.length > 0 ? (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto">
           {products.map((product, idx) => (
-            <ProductCard key={idx} {...product} />
+            <ProductCard key={idx} product={product} />
           ))}
         </div>
       ) : (

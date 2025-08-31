@@ -1,12 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Mail, Key } from "lucide-react";
 import { notify } from "../util/toastmessage";
 import { ToastContainer } from "react-toastify";
 import validator from "validator";
+import Handlelogin from "../util/Login";
+import {useUser} from "../context/Usercontext";
+import { useNavigate } from "react-router-dom";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const {updateUser,user} = useUser();
+const navigate = useNavigate();
   const validate = () => {
     if (!email) {
       notify("Email is required","warn",2000,"top-right",true);
@@ -27,12 +32,25 @@ const Login = () => {
     return true;
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     if (validate()) {
-      alert(`Email: ${email}\nPassword: ${password}`);
+
+      const loginResponse = await Handlelogin(email,password);
+      updateUser(loginResponse.userObj);
     }
   };
+
+  
+  useEffect(()=>{
+    if(user){
+      console.log(user)
+      notify("Login successful","success",1500, "bottom-right",true);
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    }
+  },[user]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 relative overflow-hidden">

@@ -33,12 +33,12 @@ const NavbarLoggedIn = ({ user = { name: "Guest", role: "buyer" } }) => {
         </div>
 
         <div className="flex items-center space-x-6 ">
-          <button className="flex items-center space-x-2 text-gray-700 hover:text-purple-500 font-medium hover:border-1 p-2 rounded-xl transition transform hover:scale-105 cursor-pointer">
+          <button  onClick={() => navigate("/about")} className="flex items-center space-x-2 text-gray-700 hover:text-purple-500 font-medium hover:border-1 p-2 rounded-xl transition transform hover:scale-105 cursor-pointer">
             <BadgeInfo className="w-5 h-5" />
             <span>About</span>
           </button>
 
-          <button className="flex items-center space-x-2 text-gray-700 hover:text-red-500 font-medium p-2 hover:border-1 rounded-xl transition transform hover:scale-105 cursor-pointer">
+          <button  onClick={() => navigate("/liked")}  className="flex items-center space-x-2 text-gray-700 hover:text-red-500 font-medium p-2 hover:border-1 rounded-xl transition transform hover:scale-105 cursor-pointer">
             <Heart className="w-5 h-5" />
             <span>Liked Items</span>
           </button>
@@ -64,9 +64,9 @@ const NavbarLoggedIn = ({ user = { name: "Guest", role: "buyer" } }) => {
             </button>
 
             {showDropdown && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-2 z-50">
+              <div className="absolute right-0 mt-1 w-48 bg-white rounded-xl shadow-lg py-2 z-50">
                 <button
-                  className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:border-1 transition"
+                  className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-indigo-100  transition"
                   onClick={() => navigate("/profile")}
                 >
                   Profile

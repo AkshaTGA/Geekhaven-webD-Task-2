@@ -59,14 +59,24 @@ const UpdateUserDetails = async (req, res) => {
 
 const GetOneItem = async (req, res) => {
   const { id } = req.params;
-  const item = await product.findById(id).populate({
-    path: "seller",
-    select: "SellerDetails.BussinessCity SellerDetails.BussinessName",
-  });
-  if (!item) {
+  if (id.length !== 24) {
     return res.status(404).json({ message: "Item not found" });
   }
-  res.status(200).json(item);
+  try {
+    const item = await product.findById(id).populate({
+      path: "seller",
+      select: "SellerDetails.BussinessCity SellerDetails.BussinessName",
+    });
+
+    if (!item) {
+      return res.status(404).json({ message: "Item not found" });
+    }
+
+    res.status(200).json(item);
+  } catch (error) {
+    console.error("Error fetching item:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
 };
 
 const addtoCart = async (req, res) => {

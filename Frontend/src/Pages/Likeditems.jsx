@@ -1,29 +1,7 @@
-import Navbar from "../Components/Navbar";
-import Carosal from "../Components/Carosal";
-import CategorySection from "../Components/CategorySection";
+import React from "react";
 import ProductGrid from "../Components/ProductGrid";
-import Footer from "../Components/Footer";
-import { useEffect, useState } from "react";
-import NavbarLoggedIn from "../Components/Navbarloggedin";
-import { useUser } from "../context/Usercontext";
 
-const Homepage = () => {
-  const {user}=useUser();
-  const [isloggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    sessionStorage.setItem("isLoggedin", user ? true : false);
-    setIsLoggedIn(sessionStorage.getItem("isLoggedin") === "true");
-  }, [user]);
-  const images = [
-    "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=1600",
-    "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=1600",
-    "https://images.unsplash.com/photo-1606813902914-3c87fa8b4cd1?w=1600",
-  ];
-
-
-
-
+const LikedItems = () => {
   const sampleProducts = [
   {
     _id: "1",
@@ -97,19 +75,21 @@ const Homepage = () => {
   }
 ];
 
-
   return (
-    <>
-      {isloggedIn ? <NavbarLoggedIn/> : <Navbar />}
-      <Carosal images={images} />
-      <CategorySection />
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-100 py-12 px-6">
+      <h1 className="text-4xl font-bold text-center text-indigo-700 mb-10">
+        ❤️ Your Liked Items
+      </h1>
 
-      <ProductGrid products={sampleProducts} title="Featured Products" />
-      <ProductGrid products={sampleProducts} title="Fashion Picks" />
-
-      <Footer />
-    </>
+      {sampleProducts.length > 0 ? (
+        <ProductGrid products={sampleProducts} title="Saved For Later" />
+      ) : (
+        <div className="text-center text-gray-600 text-lg">
+          You haven’t liked any items yet 😢
+        </div>
+      )}
+    </div>
   );
 };
 
-export default Homepage;
+export default LikedItems;

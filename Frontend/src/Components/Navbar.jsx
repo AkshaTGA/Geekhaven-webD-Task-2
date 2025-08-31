@@ -24,19 +24,19 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center space-x-6">
-          <button className="flex items-center space-x-2 text-gray-700 hover:text-purple-500 font-medium hover:border-1 p-2 rounded-xl transition transform hover:scale-105 cursor-pointer">
+          <button  onClick={() => navigate("/about")} className="flex items-center space-x-2 text-gray-700 hover:text-purple-500 font-medium hover:border-1 p-2 rounded-xl transition transform hover:scale-105 cursor-pointer">
             <BadgeInfo className="w-5 h-5" />
             <span>About</span>
           </button>
-          <button className="flex items-center space-x-2 text-gray-700 hover:text-red-500 font-medium hover:border-1 p-2 rounded-xl transition transform hover:scale-105 cursor-pointer">
+          <button  onClick={() => navigate("/liked")} className="flex items-center space-x-2 text-gray-700 hover:text-red-500 font-medium hover:border-1 p-2 rounded-xl transition transform hover:scale-105 cursor-pointer">
             <Heart className="w-5 h-5" />
             <span>Liked Items</span>
           </button>
-          <button className="flex items-center space-x-2 text-gray-700 hover:text-green-600 hover:border-1 p-2 rounded-xl  font-medium transition transform hover:scale-105 cursor-pointer">
+          <button  onClick={() => navigate("/become-seller")} className="flex items-center space-x-2 text-gray-700 hover:text-green-600 hover:border-1 p-2 rounded-xl  font-medium transition transform hover:scale-105 cursor-pointer">
             <Store className="w-5 h-5" />
             <span>Become Seller</span>
           </button>
-          <button className="flex items-center space-x-2 text-gray-700 hover:text-indigo-600 hover:border-1 p-2 rounded-xl  font-medium transition transform hover:scale-105 cursor-pointer">
+          <button  onClick={() => navigate("/login")} className="flex items-center space-x-2 text-gray-700 hover:text-indigo-600 hover:border-1 p-2 rounded-xl  font-medium transition transform hover:scale-105 cursor-pointer">
             <LogIn className="w-5 h-5" />
             <span>Login</span>
           </button>

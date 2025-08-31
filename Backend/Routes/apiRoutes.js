@@ -4,7 +4,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const router = express.Router();
 const fileupload = require("express-fileupload");
-const { handleSignup, handleLogin, authcheck } = require("../Controllers/Auth");
+const { handleSignup, handleLogin, authcheck, checkauth } = require("../Controllers/Auth");
 const {
   ApplyForSeller,
   AddItem,
@@ -75,5 +75,7 @@ router.delete("/delete", authcheck, deleteAccount);
 router.get("/priceBreakup", authcheck, getPriceBreakup);
 
 router.post("/checkout", authcheck, checkout);
+
+router.get("/auth/checkauth", checkauth);
 
 module.exports = router;

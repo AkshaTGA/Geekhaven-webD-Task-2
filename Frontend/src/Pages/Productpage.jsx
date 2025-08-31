@@ -3,15 +3,16 @@ import Navbar from "../Components/Navbar";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useParams} from "react-router-dom";
 import NavbarLoggedIn from "../Components/Navbarloggedin";
+import ProductNotFound from "../Components/Notfound";
 
 const ProductPage = () => {
   const { id } = useParams();
   const [isloggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
-    console.log(sessionStorage.getItem("isloggedin"))
     setIsLoggedIn(sessionStorage.getItem("isLoggedin") === "true" ? true : false);
   }, []);
   const [product, setProduct] = useState({
+    default:true,
     Productname: "Premium Wireless Headphones",
     description:
       "Experience immersive audio with active noise cancellation, 40 hours of battery life, and a sleek ergonomic design. Perfect for music lovers and professionals.",
@@ -35,6 +36,9 @@ const ProductPage = () => {
     const fetchProduct = async () => {
       try {
         const response = await fetch(`http://localhost:3001/api/item/${id}`);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
         const data = await response.json();
         setProduct(data);
         const random = Math.floor(Math.random() * 30);
@@ -51,6 +55,12 @@ const ProductPage = () => {
     fetchProduct();
   }, [id]);
 
+useEffect(() => {
+  console.log(product);
+}, [product]);
+
+
+
   const handlePrevImage = () => {
     const currentIndex = product.images.indexOf(selectedImage);
     const prevIndex = (currentIndex - 1 + product.images.length) % product.images.length;
@@ -64,6 +74,7 @@ const ProductPage = () => {
   };
 
   return (
+    
     <div className="bg-gradient-to-b from-gray-100 via-gray-50 to-white min-h-screen">
       {isloggedIn ? <NavbarLoggedIn /> : <Navbar />}
       {isLoading && (
@@ -71,7 +82,8 @@ const ProductPage = () => {
           <div className="loader"></div>
         </div>
       )}
-      {!isLoading && (
+      {!isLoading && product.default==true && <ProductNotFound />}
+      {!isLoading && product.default==null && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
 
@@ -120,11 +132,11 @@ const ProductPage = () => {
                 </h1>
                 <div className="mb-6 flex items-center gap-4">
                   <span className="text-3xl font-extrabold text-blue-600">
-                    ${discountedPrice.toFixed(2)}
+                    ₹{discountedPrice.toFixed(2)}
                   </span>
                   {product.price && (
                     <span className="text-lg text-gray-400 line-through">
-                      ${product.price.toFixed(0)}
+                      ₹{product.price.toFixed(0)}
                     </span>
                   )}
                   {discount > 0 && (
