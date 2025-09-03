@@ -13,7 +13,7 @@
 
 # API — Short reference
 
-Base URL examples: `http://localhost:{PORT}` or `https://geekhaven-task2-backend.example.com`
+Base URL examples: `http://localhost:{PORT}` or `https://geekhaven-task2-backend.onrender.com`
 
 Auth: cookie `SID` (JWT). Checkout responses include `X-Signature` header.
 
